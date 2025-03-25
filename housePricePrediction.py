@@ -20,7 +20,7 @@ data = pd.get_dummies(data, columns=['Neighborhood'], drop_first=True)
 
 # Checking for missing values
 miss_values = data.isnull().sum()
-print(miss_values)
+print("Missing Values:", miss_values)
 # If there are any missing values then 
 data.dropna(inplace=True)
 
@@ -50,9 +50,39 @@ test_data = test_data[data.columns]  # Reorder columns to match training set
 # Training the model
 model = LinearRegression()
 model.fit(X, y)
+print("Model Trained Successfully!")
 
-# Making predictions on test data
+# Ensure SalePrice is NOT in test data before making predictions
+if 'SalePrice' in test_data.columns:
+    test_data = test_data.drop('SalePrice', axis=1)
+
+# Reordering test data columns to match training data
+test_data = test_data[X.columns]  # X.columns ensures matching features
+
+print("Test data prepared successfully!")
+
+# Make predictions
 predictions = model.predict(test_data)
+
+# Converting predictions into a DataFrame for display
+predicted_df = pd.DataFrame({'Predicted Sale Price': predictions})
+
+# Displaying the predicted sale prices
+print(predicted_df.head())
+
+# Evaluate Model Preformance
+train_predictions = model.predict(X)
+
+#Calculate evaluation matrix
+mse = mean_squared_error(y, train_predictions)
+rmse = np.sqrt(mse)
+r2 = r2_score(y, train_predictions)
+
+# Printing the evaluation results
+print(f"📈 Model Evaluation:")
+print(F"• Mean Sqaured Error: {mse: .2f}")
+print(f"• Root Mean Squared Error: {rmse: .2f}")
+print(f"• R2 Score: {r2: .2f}")
 
 # Saving the predicted values to csv file
 save = pd.DataFrame({"Predicted Sale Price": predictions})
