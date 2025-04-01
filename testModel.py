@@ -4,29 +4,40 @@ import numpy as np
 # Code for model testting based on the data entered by user
 model = joblib.load('house_price_model.pkl')
 
-def predict_house_price():
-    print("\n🔹 Welcome to the House Price Predictor 🔹\n")
+# Load the trained model
+try:
+    model = joblib.load("house_price_model.pkl")
+except FileNotFoundError:
+    print("Error: Model file not found! Make sure 'house_price_model.pkl' exists.")
+    exit()
 
-    # Taking input from the user
-    try:
-        lot_area = float(input("📌 Enter Lot Area: "))
-        neighborhood_encoded = int(input("📌 Enter Neighborhood (1-6): "))  # Mapping A-F to 1-6
-        bedrooms = int(input("📌 Enter Number of Bedrooms: "))
+# Function to get valid Lot Area input
+def get_valid_lot_area():
+    while True:
+        try:
+            lot_area = float(input("📌 Enter Lot Area (500 - 15,000): "))
+            if 500 <= lot_area <= 15000:
+                return lot_area
+            else:
+                print("❌ Error: Lot Area must be between 500 and 15,000. Try again.")
+        except ValueError:
+            print("❌ Error: Please enter a valid numeric value.")
 
-        # Create input array
-        user_data = np.array([[lot_area, neighborhood_encoded, bedrooms]])
+# Get user input
+print("\n🏡 Welcome to the House Price Predictor 🔹")
 
-        # Predict log sale price
-        predicted_log_price = model.predict(user_data)
+lot_area = get_valid_lot_area()  # Ensures valid Lot Area
+neighborhood = int(input("📌 Enter Neighborhood (1-6): "))
+bedrooms = int(input("📌 Enter Number of Bedrooms: "))
 
-        # Convert back to actual sale price
-        predicted_price = np.exp(predicted_log_price)[0]  # Convert log price back to normal price
+# Ensure input is in the correct format (as a NumPy array)
+user_input = np.array([[lot_area, neighborhood, bedrooms]])
 
-        print(f"\n✅ Predicted House Price: ${predicted_price:,.2f}\n")
+# Make prediction (log scale)
+predicted_log_price = model.predict(user_input)[0]
 
-    except ValueError:
-        print("\n⚠️ Invalid input! Please enter numerical values.")
+# Convert back to actual price (Inverse Log Transformation)
+predicted_price = np.exp(predicted_log_price)
 
-# Run the function
-if __name__ == "__main__":
-    predict_house_price()
+# Display the predicted price
+print(f"\n✅ Predicted House Price: ${predicted_price:,.2f}")
