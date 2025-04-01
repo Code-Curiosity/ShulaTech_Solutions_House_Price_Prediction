@@ -3,7 +3,7 @@
 ## 📌 Project Overview
 This project predicts house prices using a **Linear Regression** model. The dataset includes key housing attributes, and the model estimates `SalePrice` based on selected features.
 
-## 📂 Dataset
+## 📚 Dataset
 The dataset used in this project is stored in `custom_housing_data.csv`. Key features:
 
 | Feature Name     | Description                                                  |
@@ -26,10 +26,32 @@ The dataset used in this project is stored in `custom_housing_data.csv`. Key fea
 5. **Save Model**: Store the trained model as `house_price_model.pkl`.
 6. **Model Prediction**: Use `testModel.py` to predict house prices based on user input.
 
-## 📥 Installation & Usage
+## 📝 Installation & Usage
 
 ### 🔹 Prerequisites
 Ensure Python is installed along with required libraries:
 
 ```bash
 pip install pandas numpy matplotlib seaborn scikit-learn joblib
+```
+
+### 🔹 Running the Project
+
+1. **Train the Model** (Run this first if `house_price_model.pkl` is missing):
+   ```bash
+   python trainModel_Linear_reg.py
+   ```
+
+2. **Test the Model** (Predict house prices interactively):
+   ```bash
+   python testModel.py
+   ```
+
+## 📌 Next Steps
+- Improve predictions by adding more features (`GrLivArea`, `TotalBsmtSF`, etc.).
+- Experiment with advanced models like **Random Forest** or **XGBoost**.
+- Implement a **web-based UI** using **Flask** or **Streamlit**.
+
+---
+
+💡 **Contributions are welcome!** Fork and improve the project. 😊
